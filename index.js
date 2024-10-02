@@ -1,3 +1,4 @@
+require("./db");
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -5,7 +6,6 @@ app.use(cors());
 
 app.use(express.json());
 
-require("./db");
 const Hotel = require("./models/hotel.models");
 
 async function createHotel(hotel) {
