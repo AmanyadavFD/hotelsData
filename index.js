@@ -37,6 +37,29 @@ async function hotelDeleteBYID(hotelId) {
     console.log(error);
   }
 }
+async function getAllHotels() {
+  try {
+    const allHotels = await Hotel.find();
+    // console.log(allBooks);
+    return allHotels;
+  } catch (error) {
+    console.log(error);
+  }
+}
+app.get("/hotels", async (req, res) => {
+  try {
+    const hotels = await getAllHotels();
+    if (hotels.length != 0) {
+      res
+        .status(201)
+        .json({ message: "Here is your all hotels", hotels: hotels });
+    } else {
+      res.status(404).json({ error: "hotels not found." });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 app.delete("/hotels/:hotelId", async (req, res) => {
   try {
