@@ -29,6 +29,30 @@ app.post("/hotels", async (req, res) => {
   }
 });
 
+async function hotelByName(name) {
+  try {
+    const getHotelByName = await Hotel.findOne({ name: name });
+    console.log(getHotelByName);
+    return getHotelByName;
+  } catch (error) {}
+}
+hotelByName("New Hotel");
+
+app.get("/hotels/name/:hotelName", async (req, res) => {
+  try {
+    const findHotelByName = await hotelByName(req.params.hotelName);
+    if (findHotelByName) {
+      res.status(201).json({
+        message: "this is your hotel",
+        findHotelByName: findHotelByName,
+      });
+    } else {
+      res.status(404).json({ error: "hotels not found." });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to find hotel by name." });
+  }
+});
 async function hotelDeleteBYID(hotelId) {
   try {
     const deleteHotelById = await Hotel.findByIdAndDelete(hotelId);
@@ -37,6 +61,16 @@ async function hotelDeleteBYID(hotelId) {
     console.log(error);
   }
 }
+app.delete("/hotels/:hotelId", async (req, res) => {
+  try {
+    const deleteHotel = await hotelDeleteBYID(req.params.hotelId);
+    if (deleteHotel) {
+      res.status(200).json({ message: "Hotel Deleted Successfully." });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete hotel." });
+  }
+});
 async function getAllHotels() {
   try {
     const allHotels = await Hotel.find();
@@ -58,17 +92,6 @@ app.get("/hotels", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-  }
-});
-
-app.delete("/hotels/:hotelId", async (req, res) => {
-  try {
-    const deleteHotel = await hotelDeleteBYID(req.params.hotelId);
-    if (deleteHotel) {
-      res.status(200).json({ message: "Hotel Deleted Successfully." });
-    }
-  } catch (error) {
-    res.status(500).json({ error: "Failed to delete hotel." });
   }
 });
 
