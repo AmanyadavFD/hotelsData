@@ -2,7 +2,11 @@ require("./db");
 const express = require("express");
 const app = express();
 const cors = require("cors");
-app.use(cors());
+const coreOptions = {
+  origin: "*",
+  credentials: true,
+};
+app.use(cors(coreOptions));
 
 app.use(express.json());
 
